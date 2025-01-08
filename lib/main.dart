@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-//import 'package:smart_yoga_mat/BluetoothController.dart';
 import 'package:smart_yoga_mat/tastscreen.dart';
+
+
+
 
 
 void main() {
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: TestScreen()
+      home:TestScreen()
     );
   }
 }

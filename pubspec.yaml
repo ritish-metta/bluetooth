@@ -15,15 +15,18 @@ dependencies:
     sdk: flutter
   get: ^4.6.5
   flutter_reactive_ble: ^5.3.1  # BLE library
-  permission_handler: ^11.3.1
+  permission_handler: ^11.1.0
   get_storage: ^2.1.1
-  #weather: ^3.1.1
+  bluetooth_classic: ^0.0.2  # Classic Bluetooth library
+  rxdart: ^0.28.0
+  cached_network_image: ^3.4.1
+  audio_video_progress_bar: ^2.0.3
+  just_audio: ^0.9.42
+  just_audio_background: ^0.0.1-beta.13
+  http: ^1.2.2
   flutter_blue_plus: ^1.34.5
-  #flutter_blue: ^0.8.0
-  
-    # Classic Bluetooth library
-  
-
+  path_provider: ^2.0.15
+    
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -31,13 +34,20 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  #assets:
-   # - assets/  # Add your asset directory here if any (optional)
+
+  # assets:
+  #   - assets/  # Add your asset directory here if any (optional)
 
 # iOS-specific configuration for permissions
 ios:
   deployment_target: '12.0'
-  
+
+  # Permissions required for Bluetooth and Location
+  info_plist:
+    NSBluetoothAlwaysUsageDescription: "This app uses Bluetooth to connect to a yoga mat."
+    NSLocationWhenInUseUsageDescription: "This app requires location access to scan for nearby Bluetooth devices."
+
+  # Ensure the necessary Bluetooth permissions are properly handled
   plugin:
     platforms:
       ios:
