@@ -182,7 +182,7 @@ class _TestScreenState extends State<TestScreen> {
 
         // Debug information
         print("Global Packet: $_globalDataPacket");
-        print("Global Water Level: $_globalWaterLevel");
+        print("Global NEW Water Level for humidifer: $_globalWaterLevel");
         print("Global Humidifier State: $_globalHumidifierState");
       } catch (error) {
         print("Error parsing received data: $error");
@@ -462,3 +462,201 @@ class _TestScreenState extends State<TestScreen> {
     );
   }
 }
+
+
+
+/*
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('BLE Light & Output Control'),
+        backgroundColor: Colors.teal,
+      ),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: _startDeviceScan,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.teal,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            ),
+            child: Text(
+              'Start Scanning',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _foundDevices.length,
+              itemBuilder: (context, index) {
+                final device = _foundDevices.elementAt(index);
+                return ListTile(
+                  title: Text(
+                      device.name.isNotEmpty ? device.name : "Unnamed Device"),
+                  subtitle: Text(device.id),
+                  trailing: ElevatedButton(
+                    onPressed: () => _connectToDevice(device.id),
+                    child: Text('Connect'),
+                  ),
+                );
+              },
+            ),
+          ),
+          if (_connectedDeviceId != null)
+            Column(
+              children: [
+                Text(
+                  _isConnected
+                      ? 'Connected to $_connectedDeviceId'
+                      : 'Connecting to $_connectedDeviceId...',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+
+                ElevatedButton(
+                  onPressed: _isConnected ? _toggleLight : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _lightState ? Colors.red : Colors.green,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    _lightState ? 'Turn OFF Light' : 'Turn ON Light',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+
+                SizedBox(height: 10),
+
+                ElevatedButton(
+                  onPressed: _isConnected ? _sendOutputData : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _isConnected ? Colors.blue : Colors.grey,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'Send Output Data',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+
+                SizedBox(height: 5),
+
+                ElevatedButton(
+                  onPressed: _isConnected && _connectedDeviceId != null
+                      ? () {
+                          if (_isToggling) {
+                            _stopToggling(); // Stop toggling
+                          } else {
+                            _toggleLightPeriodically(); // Start toggling
+                            setState(() {
+                              _isToggling = true; // Mark toggling as started
+                            });
+                          }
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _isToggling
+                        ? Colors.red
+                        : Colors.blue, // Change color based on toggling state
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    _isToggling
+                        ? 'Stop Toggling Light'
+                        : 'Start Toggling Light', // Change text based on toggling state
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+
+                SizedBox(height: 5),
+                Text(
+                  "Received Data:",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                SizedBox(height: 4),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    _receivedData,
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ),
+
+                SizedBox(height: 5),
+                Text(
+                  "Water Height:",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '$_waterHeightGlobal',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  "Humidifier State:",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '$_humidifierState',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+
+                // Global Data Section
+                SizedBox(height: 5),
+                Text(
+                  "Global Data:",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                SizedBox(height: 5),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    _globalDataPacket.join(', '),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Global Water Level:",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '$_globalWaterLevel',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  "Global Humidifier State:",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '$_globalHumidifierState',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ],
+
+              ///annded thing screen
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+
+*/
