@@ -182,7 +182,7 @@ class _TestScreenState extends State<TestScreen> {
 
         // Debug information
         print("Global Packet: $_globalDataPacket");
-        print("Global Water Level: $_globalWaterLevel");
+        print("Global NEW Water Level for humidifer: $_globalWaterLevel");
         print("Global Humidifier State: $_globalHumidifierState");
       } catch (error) {
         print("Error parsing received data: $error");
