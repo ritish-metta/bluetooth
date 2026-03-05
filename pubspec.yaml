@@ -26,6 +26,10 @@ dependencies:
   http: ^1.2.2
   flutter_blue_plus: ^1.34.5
   path_provider: ^2.0.15
+  flutter_blue_classic: ^0.0.3
+  shimmer: ^3.0.0
+ 
+  
     
 dev_dependencies:
   flutter_test:
@@ -35,8 +39,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # assets:
-  #   - assets/  # Add your asset directory here if any (optional)
+  assets:
+  - lib/assets/commands.json
 
 # iOS-specific configuration for permissions
 ios:

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -87,6 +86,10 @@ class _TestScreenState extends State<TestScreen> {
     });
   }
 
+
+
+
+
   void _connectToDevice(String deviceId) {
     print("Attempting to connect to device: $deviceId");
     setState(() {
@@ -130,11 +133,30 @@ class _TestScreenState extends State<TestScreen> {
         setState(() {
           _isConnected = true;
         });
+       // Wait for 3 seconds after connection and then print the message
+      Future.delayed(Duration(seconds: 3), () {
+        print("BLE CONNECTED READY TO SEND COMMANDS");
+      });
+
       }
     }, onError: (error) {
       print("Connection error: $error");
     });
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //i added this part
 
 List<String> _globalDataPacket = List.filled(10, '0'); // Global packet (size 10)
@@ -233,35 +255,41 @@ void _toggleLight() {
 
 
 
+
+
+
+Timer? _togglingTimer;
+final List<int> _predefinedSeconds = [ 5, 9, 12, 17, 22, 27, 34, 41, 53, 77]; // Predefined times
+final int _totalInterval = 180; // Total duration in seconds (3 minutes)
+int _elapsedSeconds = 0; // Counter for elapsed seconds
+// bool _isToggling = false; // Toggling state
+
 void _toggleLightPeriodically() {
   if (_isConnected && _connectedDeviceId != null) {
-    int count = 0;
-    const int maxCount = 6; // 1 minute = 6 intervals of 10 seconds
+    _elapsedSeconds = 0; // Reset elapsed time
+    _togglingTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      _elapsedSeconds++;
 
-    Timer.periodic(Duration(seconds: 10), (Timer timer) {
-      if (count >= maxCount) {
-        timer.cancel(); // Stop after 1 minute
-        setState(() {
-          _isToggling = false; // Stop the toggling
-        });
-        print("Toggling finished.");
-        return;
+	if (_elapsedSeconds==1) {
+        _sendDataInitial(_elapsedSeconds); // Send predefined data
       }
 
-      // Toggle the light between on (1) and off (0)
-      final command = [_lightState ? 5 : 9]; // ON: 1, OFF: 0
-      _ble.writeCharacteristicWithoutResponse(_txCharacteristic, value: command);
-      setState(() => _lightState = !_lightState);
-      print("Light toggled: ${_lightState ? 'ON' : 'OFF'}");
 
-      count++;
+
+      // Check if the current second matches any predefined second
+      if (_predefinedSeconds.contains(_elapsedSeconds)) {
+        _sendData(_elapsedSeconds); // Send predefined data
+      }
+
+      // Automatically stop after the interval ends
+      if (_elapsedSeconds >= _totalInterval) {
+        _stopToggling();
+      }
     });
   } else {
     print("Device not connected or _connectedDeviceId is null.");
   }
 }
-
-
 //extra added////////////////////////////////////
 
 
@@ -269,7 +297,9 @@ void _toggleLightPeriodically() {
   // Dummy BLE Service Class for demonstration
   
 
+////sending data commens after onnecting
 
+/////sending the send data after connecting
 
 
 
@@ -283,17 +313,49 @@ void _toggleLightPeriodically() {
 ////recived part will ended 
 
   @override
-  void dispose() {
-    _scanSubscription.cancel();
-    _scanTimer?.cancel();
-    super.dispose();
-  }
+void dispose() {
+  _scanSubscription.cancel();
+  _scanTimer?.cancel();
+  _togglingTimer?.cancel(); // Cleanup toggling timer
+  super.dispose();
+}
+
+
+
   void _stopToggling() {
+  _togglingTimer?.cancel(); // Cancel the timer if it's running
+  _togglingTimer = null; // Clear the timer reference
   setState(() {
-    _isToggling = false; // Stop the toggling
+    _isToggling = false; // Update the toggling state
   });
   print("Toggling stopped.");
 }
+
+
+void _sendData(int second) {
+  final command = [_lightState ? 0 : 1]; // Toggle data: ON = 1, OFF = 0
+  // Replace the following line with the BLE write logic
+  print("Sending data: ${command.first} at second $second");
+  _ble.writeCharacteristicWithoutResponse(_txCharacteristic, value: command);
+  setState(() {
+    _lightState = !_lightState; // Toggle the light state
+  });
+}
+
+
+
+////including zero at 
+
+void _sendDataInitial(int second) {
+  final command = [0]; // Sending 0 as initial data
+  print("Sending initial data: ${command.first} at second $second");
+  _ble.writeCharacteristicWithoutResponse(_txCharacteristic, value: command);
+  setState(() {
+    _lightState = false; // Ensure light is off initially
+  });
+}
+
+
 
 
 

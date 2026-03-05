@@ -11,8 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 //import 'package:smart_yoga_mat/BluetoothController.dart';
 import 'package:smart_yoga_mat/bluetoothhumidifierapp.dart';
-//import 'package:smart_yoga_mat/BluetoothController.dart';
-//import 'package:smart_yoga_mat/BluetoothHumidifierApp.dart';
+
 
 
 

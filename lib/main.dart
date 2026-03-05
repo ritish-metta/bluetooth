@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smart_yoga_mat/tastscreen.dart';
+import 'package:smart_yoga_mat/ai_integration/bledatascreen.dart';
+
 
 
 
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:TestScreen()
+      home:Bledatascreen()
     );
   }
 }

@@ -29,7 +29,7 @@ class BluetoothController extends GetxController with WidgetsBindingObserver {
     'CHARACTERISTIC_OUTPUT_UUID':
         Uuid.parse("fad2648e-5eba-4cf8-9275-68df18d432e0"),
     'CHARACTERISTIC_INPUT_UUID':
-        Uuid.parse("02639a8e-b355-476d-9028-274125328b58"),
+        Uuid.parse("142f29dd-b1f0-4fa8-8e55-5a2d5f3e2471"),
   };
 
   get currentCharacteristic => null;
